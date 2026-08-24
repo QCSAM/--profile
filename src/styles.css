@@ -107,10 +107,19 @@ a:focus-visible {
   font-size: 0.78rem;
   font-weight: 650;
   letter-spacing: 0.08em;
-  transition: color 240ms ease, background 240ms ease, transform 240ms ease;
+  transition:
+    color 240ms ease,
+    background-color 240ms ease,
+    border-color 240ms ease,
+    box-shadow 240ms ease,
+    transform 240ms ease;
 }
 
 .button:hover {
+  transform: translateY(-2px);
+}
+
+.button:focus-visible {
   transform: translateY(-2px);
 }
 
@@ -120,7 +129,9 @@ a:focus-visible {
 
 .button--light:hover {
   color: var(--espresso);
+  border-color: var(--cream);
   background: var(--cream);
+  box-shadow: 0 12px 30px rgba(15, 9, 6, 0.18);
 }
 
 .button--filled {
@@ -131,13 +142,23 @@ a:focus-visible {
 
 .button--filled:hover {
   color: var(--espresso);
+  border-color: var(--paper);
   background: var(--paper);
+  box-shadow: 0 12px 30px rgba(15, 9, 6, 0.16);
 }
 
 .button--paper {
   color: var(--espresso);
   border-color: var(--paper);
   background: var(--paper);
+}
+
+.button--paper:hover,
+.button--paper:focus-visible {
+  color: var(--paper);
+  border-color: var(--caramel);
+  background: var(--caramel);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.24);
 }
 
 .text-link {
