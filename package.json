@@ -10,12 +10,10 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@react-three/fiber": "^9.7.0",
     "@vitejs/plugin-react": "latest",
+    "vite": "latest",
     "react": "latest",
-    "react-dom": "latest",
-    "three": "^0.185.1",
-    "vite": "latest"
+    "react-dom": "latest"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "latest",
