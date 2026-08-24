@@ -57,6 +57,7 @@ export const projects = [
     metrics: ['50+ 家合作企业触达', '32 家需求企业对接', '15 位嘉宾协同'],
     tags: ['行业研究', '供应链', '商务协同'],
     image: '/media/work-supply-chain.jpg',
+    carouselLabel: '网聚资本实习照片',
     images: [
       { image: '/media/wangju-industrial-park.jpg', alt: '双汇第一工业园实地调研' },
       { image: '/media/wangju-industry-visit.jpg', alt: '湖南广电食品饮料行业共创会参访' },
@@ -75,6 +76,19 @@ export const projects = [
     metrics: ['900+ km² 空间数据', '3 条成矿构造带'],
     tags: ['GIS', '空间数据', '可持续评估'],
     image: '/media/work-xiahe.jpg',
+    carouselLabel: '夏河项目调研照片',
+    images: [
+      {
+        image: '/media/xiahe-spatial-data.jpg',
+        alt: '夏河项目地球化学空间数据处理',
+        position: 'center 40%',
+      },
+      {
+        image: '/media/xiahe-field-site.jpg',
+        alt: '夏河地区野外调查与采样现场',
+        position: 'center 54%',
+      },
+    ],
   },
   {
     id: 'sanjiangyuan',

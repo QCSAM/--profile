@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import App from './App'
 
@@ -57,6 +57,15 @@ describe('resume site', () => {
     expect(carousel).toBeInTheDocument()
     expect(carousel.querySelectorAll('img')).toHaveLength(3)
     expect(screen.getByRole('img', { name: '双汇第一工业园实地调研' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '下一张照片' })).toBeInTheDocument()
+    expect(within(carousel).getByRole('button', { name: '下一张照片' })).toBeInTheDocument()
+  })
+
+  it('shows the two Xiahe research photos in the same accessible carousel style', () => {
+    render(<App />)
+
+    const carousel = screen.getByRole('group', { name: '夏河项目调研照片' })
+    expect(carousel).toBeInTheDocument()
+    expect(carousel.querySelectorAll('img')).toHaveLength(2)
+    expect(screen.getByRole('img', { name: '夏河项目地球化学空间数据处理' })).toBeInTheDocument()
   })
 })

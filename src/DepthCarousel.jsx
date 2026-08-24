@@ -136,7 +136,13 @@ function DepthCarousel({
             aria-hidden={active !== index}
             onClick={() => focusSlide(index)}
           >
-            <img className="depth-carousel__image" src={slide.image} alt={slide.alt} draggable="false" />
+            <img
+              className="depth-carousel__image"
+              src={slide.image}
+              alt={slide.alt}
+              draggable="false"
+              style={{ objectPosition: slide.position || 'center' }}
+            />
             <span className="depth-carousel__tint" aria-hidden="true" />
           </div>
         ))}

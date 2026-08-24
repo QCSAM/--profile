@@ -192,7 +192,7 @@ function App() {
               <article className="work-card" data-testid="work-card" key={project.id}>
                 <div className={`work-card__image-wrap${project.images ? ' work-card__image-wrap--carousel' : ''}`}>
                   {project.images ? (
-                    <DepthCarousel items={project.images} ariaLabel="网聚资本实习照片" />
+                    <DepthCarousel items={project.images} ariaLabel={project.carouselLabel} />
                   ) : (
                     <img
                       className="work-card__image"
