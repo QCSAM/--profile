@@ -105,4 +105,14 @@ describe('resume site', () => {
     expect(document.querySelector('.depth-carousel__card [data-motion="parallax-image"]')).toBeNull()
     expect(document.querySelector('.profile__topography [data-motion="parallax-image"]')).toBeNull()
   })
+
+  it('exposes a deterministic keyboard focus target for the skip link', () => {
+    render(<App />)
+
+    const skipLink = screen.getByRole('link', { name: '跳至主要内容' })
+    skipLink.focus()
+
+    expect(document.activeElement).toBe(skipLink)
+    expect(skipLink).toHaveClass('skip-link')
+  })
 })
