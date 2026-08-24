@@ -68,4 +68,14 @@ describe('resume site', () => {
     expect(carousel.querySelectorAll('img')).toHaveLength(2)
     expect(screen.getByRole('img', { name: '夏河项目地球化学空间数据处理' })).toBeInTheDocument()
   })
+
+  it('exposes the opening curtain and centralized editorial motion targets', () => {
+    render(<App />)
+
+    expect(document.querySelector('.opening-curtain[aria-hidden="true"]')).toBeInTheDocument()
+    expect(document.querySelector('[data-motion="hero-title"]')).toHaveTextContent('崔琪')
+    expect(document.querySelectorAll('[data-motion="section-heading"]')).toHaveLength(3)
+    expect(document.querySelectorAll('[data-motion="work-card"]')).toHaveLength(5)
+    expect(document.querySelector('[data-motion="contact"]')).toBeInTheDocument()
+  })
 })

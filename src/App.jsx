@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { profile, projects, strengths } from './resumeData'
 import Topography from './Topography'
 import DepthCarousel from './DepthCarousel'
+import useEditorialMotion from './useEditorialMotion'
 
 const navItems = [
   ['about', 'About'],
@@ -12,7 +13,7 @@ const navItems = [
 
 function SectionHeading({ index, eyebrow, children }) {
   return (
-    <header className="section-heading">
+    <header className="section-heading" data-motion="section-heading">
       <span className="section-heading__index">{index}</span>
       <div>
         <p className="eyebrow">{eyebrow}</p>
@@ -23,7 +24,10 @@ function SectionHeading({ index, eyebrow, children }) {
 }
 
 function App() {
+  const motionRootRef = useRef(null)
   const [isNavFloating, setIsNavFloating] = useState(false)
+
+  useEditorialMotion(motionRootRef)
 
   useEffect(() => {
     const updateNavigation = () => {
@@ -41,7 +45,10 @@ function App() {
   }, [])
 
   return (
-    <>
+    <div className="site" ref={motionRootRef}>
+      <div className="opening-curtain" aria-hidden="true">
+        <span className="opening-curtain__rule" />
+      </div>
       <a className="skip-link" href="#about">
         跳至主要内容
       </a>
@@ -80,12 +87,12 @@ function App() {
         <div className="hero__shade" />
 
         <div className="hero__content shell">
-          <p className="hero__kicker">Earth Science · ESG · GIS</p>
+          <p className="hero__kicker" data-motion="hero-kicker">Earth Science · ESG · GIS</p>
           <h1 aria-label="崔琪 QI CUI">
-            <span className="hero__name-primary">崔琪</span>
-            <small className="hero__name-secondary">QI CUI</small>
+            <span className="hero__name-primary" data-motion="hero-title">崔琪</span>
+            <small className="hero__name-secondary" data-motion="hero-name-secondary">QI CUI</small>
           </h1>
-          <div className="hero__footer">
+          <div className="hero__footer" data-motion="hero-footer">
             <p>
               帝国理工学院地球科学与工程学院学生
               <br />
@@ -101,7 +108,7 @@ function App() {
             </div>
           </div>
         </div>
-        <p className="hero__folio">PORTFOLIO / 2026</p>
+        <p className="hero__folio" data-motion="hero-folio">PORTFOLIO / 2026</p>
       </header>
 
       <main>
@@ -137,12 +144,12 @@ function App() {
             </SectionHeading>
 
             <div className="profile__layout">
-              <figure className="portrait-frame">
+              <figure className="portrait-frame" data-motion="portrait-frame">
                 <img src="/media/portrait.jpg" alt="崔琪个人头像" />
                 <figcaption>QI CUI · LONDON / BEIJING</figcaption>
               </figure>
 
-              <div className="profile__copy">
+              <div className="profile__copy" data-motion="profile-copy">
                 <p className="profile__lead">{profile.intro}</p>
                 <dl className="profile__details">
                   <div>
@@ -169,7 +176,7 @@ function App() {
                 </dl>
                 <div className="profile__facts" aria-label="个人数据">
                   {profile.facts.map((fact) => (
-                    <div key={fact.label}>
+                    <div key={fact.label} data-motion="profile-fact">
                       <strong>{fact.value}</strong>
                       <span>{fact.label}</span>
                     </div>
@@ -189,7 +196,7 @@ function App() {
 
           <div className="work-list shell">
             {projects.map((project, index) => (
-              <article className="work-card" data-testid="work-card" key={project.id}>
+              <article className="work-card" data-testid="work-card" data-motion="work-card" key={project.id}>
                 <div className={`work-card__image-wrap${project.images ? ' work-card__image-wrap--carousel' : ''}`}>
                   {project.images ? (
                     <DepthCarousel items={project.images} ariaLabel={project.carouselLabel} />
@@ -233,21 +240,21 @@ function App() {
           </SectionHeading>
           <div className="strength-grid">
             {strengths.map((strength) => (
-              <article className="strength-card" key={strength.number}>
+              <article className="strength-card" data-motion="strength-card" key={strength.number}>
                 <span>{strength.number}</span>
                 <h3>{strength.title}</h3>
                 <p>{strength.description}</p>
               </article>
             ))}
           </div>
-          <p className="tools-line">
+          <p className="tools-line" data-motion="tools-line">
             <span>Tools</span>
             Codex · Python · SQL · ArcGIS · Inkscape · Puffinplots · Excel · PowerPoint
           </p>
         </section>
       </main>
 
-      <footer className="contact" id="contact">
+      <footer className="contact" id="contact" data-motion="contact">
         <div className="contact__inner shell">
           <p className="eyebrow">04 / Contact</p>
           <h2>
@@ -255,8 +262,8 @@ function App() {
             <br />
             next question.
           </h2>
-          <p className="contact__intro">如果你正在寻找兼具研究深度、数据意识与沟通能力的合作者，欢迎联系我。</p>
-          <div className="contact__details">
+          <p className="contact__intro" data-motion="contact-intro">如果你正在寻找兼具研究深度、数据意识与沟通能力的合作者，欢迎联系我。</p>
+          <div className="contact__details" data-motion="contact-details">
             <div>
               <span>Email</span>
               <p>{profile.email}</p>
@@ -266,7 +273,7 @@ function App() {
               <p>{profile.phone}</p>
             </div>
           </div>
-          <div className="contact__actions">
+          <div className="contact__actions" data-motion="contact-actions">
             <a className="button button--filled button--paper" href={`mailto:${profile.email}`}>
               发送邮件 <span aria-hidden="true">↗</span>
             </a>
@@ -274,13 +281,13 @@ function App() {
               返回顶部 <span aria-hidden="true">↑</span>
             </a>
           </div>
-          <div className="contact__foot">
+          <div className="contact__foot" data-motion="contact-foot">
             <span>QI CUI © 2026</span>
             <span>EARTH SCIENCE · ESG · GIS</span>
           </div>
         </div>
       </footer>
-    </>
+    </div>
   )
 }
 
