@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { profile, projects, strengths } from './resumeData'
 import Topography from './Topography'
+import DepthCarousel from './DepthCarousel'
 
 const navItems = [
   ['about', 'About'],
@@ -189,12 +190,16 @@ function App() {
           <div className="work-list shell">
             {projects.map((project, index) => (
               <article className="work-card" data-testid="work-card" key={project.id}>
-                <div className="work-card__image-wrap">
-                  <img
-                    className="work-card__image"
-                    src={project.image}
-                    alt={`${project.title}主题视觉，非项目现场照片`}
-                  />
+                <div className={`work-card__image-wrap${project.images ? ' work-card__image-wrap--carousel' : ''}`}>
+                  {project.images ? (
+                    <DepthCarousel items={project.images} ariaLabel="网聚资本实习照片" />
+                  ) : (
+                    <img
+                      className="work-card__image"
+                      src={project.image}
+                      alt={`${project.title}主题视觉，非项目现场照片`}
+                    />
+                  )}
                   <span className="work-card__number">{String(index + 1).padStart(2, '0')}</span>
                   <span className="work-card__kind">{project.kind}</span>
                 </div>

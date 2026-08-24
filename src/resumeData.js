@@ -57,6 +57,11 @@ export const projects = [
     metrics: ['50+ 家合作企业触达', '32 家需求企业对接', '15 位嘉宾协同'],
     tags: ['行业研究', '供应链', '商务协同'],
     image: '/media/work-supply-chain.jpg',
+    images: [
+      { image: '/media/wangju-industrial-park.jpg', alt: '双汇第一工业园实地调研' },
+      { image: '/media/wangju-industry-visit.jpg', alt: '湖南广电食品饮料行业共创会参访' },
+      { image: '/media/wangju-market-analysis.jpg', alt: '中式糕点市场数据分析分享现场' },
+    ],
   },
   {
     id: 'xiahe',

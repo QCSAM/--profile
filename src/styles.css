@@ -665,6 +665,16 @@ a:focus-visible {
   background: var(--cocoa);
 }
 
+.work-card__image-wrap--carousel {
+  aspect-ratio: 1.46 / 1;
+  overflow: visible;
+  background: transparent;
+}
+
+.work-card__image-wrap--carousel::after {
+  display: none;
+}
+
 .work-card__image-wrap::after {
   position: absolute;
   inset: 0;
@@ -689,7 +699,7 @@ a:focus-visible {
 .work-card__number,
 .work-card__kind {
   position: absolute;
-  z-index: 2;
+  z-index: 3000;
   top: 24px;
   font-size: 0.62rem;
   font-weight: 650;

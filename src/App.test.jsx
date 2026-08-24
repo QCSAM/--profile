@@ -49,4 +49,14 @@ describe('resume site', () => {
     expect(profile.querySelector('.profile__topography')).toBeInTheDocument()
     expect(document.querySelectorAll('.profile__topography')).toHaveLength(1)
   })
+
+  it('shows the three Wangju internship photos in an accessible carousel', () => {
+    render(<App />)
+
+    const carousel = screen.getByRole('group', { name: '网聚资本实习照片' })
+    expect(carousel).toBeInTheDocument()
+    expect(carousel.querySelectorAll('img')).toHaveLength(3)
+    expect(screen.getByRole('img', { name: '双汇第一工业园实地调研' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '下一张照片' })).toBeInTheDocument()
+  })
 })
