@@ -1215,6 +1215,16 @@ a:focus-visible {
   .hero__video {
     display: none;
   }
+
+  .opening-curtain {
+    display: none !important;
+  }
+
+  [data-motion] {
+    clip-path: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 
 .site { position: relative; }
@@ -1246,3 +1256,9 @@ a:focus-visible {
 .motion-reduced .opening-curtain { display: none; }
 
 .site:not(.motion-ready) .opening-curtain { display: none; }
+
+@media (max-width: 900px) {
+  .opening-curtain__rule {
+    width: min(56vw, 360px);
+  }
+}

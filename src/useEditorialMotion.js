@@ -5,7 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 export const prefersReducedMotion = () =>
-  typeof window.matchMedia === 'function'
+  typeof window !== 'undefined'
+  && typeof window.matchMedia === 'function'
   && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 export function restoreMotionState(root) {
@@ -166,13 +167,28 @@ export default function useEditorialMotion(rootRef) {
         }, 0.58))
     }, root)
 
+    const images = Array.from(root.querySelectorAll('img'))
+    const pendingImages = images.filter(image => !image.complete)
+    const refresh = () => ScrollTrigger.refresh()
+    pendingImages.forEach(image => image.addEventListener('load', refresh, { once: true }))
+
+    let resizeFrame = 0
+    const onResize = () => {
+      cancelAnimationFrame(resizeFrame)
+      resizeFrame = requestAnimationFrame(refresh)
+    }
+    window.addEventListener('resize', onResize, { passive: true })
+
     return () => {
+      pendingImages.forEach(image => image.removeEventListener('load', refresh))
+      window.removeEventListener('resize', onResize)
+      cancelAnimationFrame(resizeFrame)
       controllerAnimations.timelines.forEach(timeline => timeline.kill())
       controllerAnimations.triggers.forEach(trigger => trigger.kill())
       media.revert()
       context.revert()
       restoreMotionState(root)
-      root.classList.remove('motion-ready')
+      root.classList.remove('motion-ready', 'motion-reduced')
     }
   }, [rootRef])
 }
