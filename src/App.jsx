@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { profile, projects, strengths } from './resumeData'
 
 const navItems = [
@@ -20,11 +21,47 @@ function SectionHeading({ index, eyebrow, children }) {
 }
 
 function App() {
+  const [isNavFloating, setIsNavFloating] = useState(false)
+
+  useEffect(() => {
+    const updateNavigation = () => {
+      setIsNavFloating(window.scrollY > window.innerHeight - 120)
+    }
+
+    updateNavigation()
+    window.addEventListener('scroll', updateNavigation, { passive: true })
+    window.addEventListener('resize', updateNavigation)
+
+    return () => {
+      window.removeEventListener('scroll', updateNavigation)
+      window.removeEventListener('resize', updateNavigation)
+    }
+  }, [])
+
   return (
     <>
       <a className="skip-link" href="#about">
         跳至主要内容
       </a>
+
+      <nav
+        className={`site-nav shell${isNavFloating ? ' site-nav--floating' : ''}`}
+        aria-label="主要导航"
+      >
+        <a className="site-nav__mark" href="#top" aria-label="返回首页">
+          QC<span>°</span>
+        </a>
+        <div className="site-nav__links">
+          {navItems.map(([href, label]) => (
+            <a key={href} href={`#${href}`}>
+              {label}
+            </a>
+          ))}
+        </div>
+        <a className="button button--light site-nav__contact" href="#contact">
+          联系我
+        </a>
+      </nav>
 
       <header className="hero" id="top">
         <video
@@ -39,22 +76,6 @@ function App() {
           <source src="/media/hero-geology.mp4" type="video/mp4" />
         </video>
         <div className="hero__shade" />
-
-        <nav className="site-nav shell" aria-label="主要导航">
-          <a className="site-nav__mark" href="#top" aria-label="返回首页">
-            QC<span>°</span>
-          </a>
-          <div className="site-nav__links">
-            {navItems.map(([href, label]) => (
-              <a key={href} href={`#${href}`}>
-                {label}
-              </a>
-            ))}
-          </div>
-          <a className="button button--light site-nav__contact" href="#contact">
-            联系我
-          </a>
-        </nav>
 
         <div className="hero__content shell">
           <p className="hero__kicker">Earth Science · ESG · GIS</p>

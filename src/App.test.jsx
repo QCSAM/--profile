@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import App from './App'
 
@@ -28,5 +28,17 @@ describe('resume site', () => {
     const heading = screen.getByRole('heading', { level: 1, name: /崔琪 QI CUI/i })
     expect(heading.querySelector('.hero__name-primary')).toHaveTextContent('崔琪')
     expect(heading.querySelector('.hero__name-secondary')).toHaveTextContent('QI CUI')
+  })
+
+  it('turns the navigation into a floating kraft-paper bar after the hero', () => {
+    render(<App />)
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 900 })
+    Object.defineProperty(window, 'innerHeight', { configurable: true, value: 768 })
+
+    fireEvent.scroll(window)
+
+    expect(screen.getByRole('navigation', { name: '主要导航' })).toHaveClass(
+      'site-nav--floating',
+    )
   })
 })
