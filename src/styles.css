@@ -570,6 +570,7 @@ a:focus-visible {
 
 .profile__details dd a {
   color: var(--ink);
+  font: inherit;
   text-decoration: underline;
   text-decoration-color: transparent;
   text-underline-offset: 0.24em;
