@@ -448,6 +448,42 @@ a:focus-visible {
   margin-top: clamp(80px, 10vw, 170px);
 }
 
+.profile {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--paper);
+}
+
+.profile__topography,
+.profile__wash {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.profile__topography {
+  opacity: 0.82;
+}
+
+.profile__wash {
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(246, 240, 231, 0.78), rgba(238, 230, 216, 0.64)),
+    radial-gradient(circle at 18% 42%, rgba(246, 240, 231, 0.3), transparent 40%);
+}
+
+.profile__content {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile__topography {
+    display: none;
+  }
+}
+
 .portrait-frame {
   position: relative;
   margin: 0;

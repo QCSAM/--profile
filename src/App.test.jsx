@@ -41,4 +41,12 @@ describe('resume site', () => {
       'site-nav--floating',
     )
   })
+
+  it('mounts the restrained topography effect only in the profile section', () => {
+    render(<App />)
+
+    const profile = document.querySelector('#about')
+    expect(profile.querySelector('.profile__topography')).toBeInTheDocument()
+    expect(document.querySelectorAll('.profile__topography')).toHaveLength(1)
+  })
 })

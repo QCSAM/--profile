@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { profile, projects, strengths } from './resumeData'
+import Topography from './Topography'
 
 const navItems = [
   ['about', 'About'],
@@ -103,49 +104,76 @@ function App() {
       </header>
 
       <main>
-        <section className="profile section shell" id="about">
-          <SectionHeading index="01" eyebrow="Profile / 个人档案">
-            在地球科学与商业问题之间，建立清晰的坐标。
-          </SectionHeading>
+        <section className="profile section" id="about">
+          <div className="profile__topography" aria-hidden="true">
+            <Topography
+              lowColor="#8f765e"
+              midColor="#b9a48a"
+              highColor="#d8cab4"
+              speed={0.12}
+              morphAmount={1.4}
+              morphSpeed={0.025}
+              bands={3}
+              thickness={0.007}
+              scale={1.05}
+              pixelSize={1}
+              glow={0.12}
+              colorMode="elevation"
+              contrast={2.2}
+              brightness={0.78}
+              fillBands={false}
+              opacity={0.22}
+              grain
+              grainIntensity={0.025}
+              mouseInteraction={false}
+            />
+          </div>
+          <div className="profile__wash" aria-hidden="true" />
 
-          <div className="profile__layout">
-            <figure className="portrait-frame">
-              <img src="/media/portrait.jpg" alt="崔琪个人头像" />
-              <figcaption>QI CUI · LONDON / BEIJING</figcaption>
-            </figure>
+          <div className="profile__content shell">
+            <SectionHeading index="01" eyebrow="Profile / 个人档案">
+              在地球科学与商业问题之间，建立清晰的坐标。
+            </SectionHeading>
 
-            <div className="profile__copy">
-              <p className="profile__lead">{profile.intro}</p>
-              <dl className="profile__details">
-                <div>
-                  <dt>Education</dt>
-                  <dd>
-                    {profile.schoolZh}
-                    <span>{profile.school}</span>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Programme</dt>
-                  <dd>
-                    {profile.degree}
-                    <span>{profile.period}</span>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Contact</dt>
-                  <dd>
-                    <a href={`mailto:${profile.email}`}>{profile.email}</a>
-                    <a href={`tel:${profile.phoneHref}`}>{profile.phone}</a>
-                  </dd>
-                </div>
-              </dl>
-              <div className="profile__facts" aria-label="个人数据">
-                {profile.facts.map((fact) => (
-                  <div key={fact.label}>
-                    <strong>{fact.value}</strong>
-                    <span>{fact.label}</span>
+            <div className="profile__layout">
+              <figure className="portrait-frame">
+                <img src="/media/portrait.jpg" alt="崔琪个人头像" />
+                <figcaption>QI CUI · LONDON / BEIJING</figcaption>
+              </figure>
+
+              <div className="profile__copy">
+                <p className="profile__lead">{profile.intro}</p>
+                <dl className="profile__details">
+                  <div>
+                    <dt>Education</dt>
+                    <dd>
+                      {profile.schoolZh}
+                      <span>{profile.school}</span>
+                    </dd>
                   </div>
-                ))}
+                  <div>
+                    <dt>Programme</dt>
+                    <dd>
+                      {profile.degree}
+                      <span>{profile.period}</span>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Contact</dt>
+                    <dd>
+                      <a href={`mailto:${profile.email}`}>{profile.email}</a>
+                      <a href={`tel:${profile.phoneHref}`}>{profile.phone}</a>
+                    </dd>
+                  </div>
+                </dl>
+                <div className="profile__facts" aria-label="个人数据">
+                  {profile.facts.map((fact) => (
+                    <div key={fact.label}>
+                      <strong>{fact.value}</strong>
+                      <span>{fact.label}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
