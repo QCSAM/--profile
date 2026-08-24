@@ -722,10 +722,11 @@ a:focus-visible {
 
 .motion-ready [data-motion="parallax-image"] {
   transform-origin: center;
+  transform: translateY(var(--parallax-y, 0%)) scale(var(--parallax-scale, 1)) scale(var(--hover-scale, 1));
 }
 
 .work-card:hover .work-card__image {
-  transform: scale(1.025);
+  --hover-scale: 1.025;
   filter: saturate(0.82) sepia(0.08) contrast(1.04);
 }
 

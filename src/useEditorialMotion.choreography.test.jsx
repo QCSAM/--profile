@@ -5,6 +5,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 const motion = vi.hoisted(() => {
   const records = {
     froms: [],
+    fromTos: [],
+    mediaQueries: [],
     timelines: [],
   }
 
@@ -52,9 +54,20 @@ const motion = vi.hoisted(() => {
         records.froms.push({ target, vars })
         return animation
       },
+      fromTo(target, fromVars, vars) {
+        const animation = {
+          kill() {},
+          scrollTrigger: vars.scrollTrigger && { ...vars.scrollTrigger, kill() {} },
+        }
+        records.fromTos.push({ fromVars, target, vars })
+        return animation
+      },
       matchMedia() {
         return {
-          add() {},
+          add(query, callback) {
+            records.mediaQueries.push(query)
+            callback()
+          },
           revert() {},
         }
       },
@@ -70,6 +83,8 @@ const motion = vi.hoisted(() => {
     records,
     reset() {
       records.froms.length = 0
+      records.fromTos.length = 0
+      records.mediaQueries.length = 0
       records.timelines.length = 0
     },
   }
@@ -102,21 +117,50 @@ function MotionHarness() {
   useEditorialMotion(rootRef)
 
   return (
-    <div ref={rootRef}>
+    <>
+      <div ref={rootRef}>
       <div className="opening-curtain"><span className="opening-curtain__rule" /></div>
       <section className="profile">
         <SectionHeading section="profile" />
         <div className="profile__layout">
-          <figure data-motion="portrait" />
+          <figure className="portrait-frame" data-motion="portrait">
+            <img data-motion="parallax-image" alt="portrait" />
+          </figure>
           <div data-motion="profile-copy"><p>copy</p></div>
           <div data-motion="profile-fact">fact</div>
         </div>
+        <div className="profile__topography"><canvas /></div>
       </section>
       <section className="strengths">
         <SectionHeading section="strengths" />
         <div className="strength-grid"><article data-motion="strength-card">strength</article></div>
       </section>
-      <section className="work"><SectionHeading section="work" /></section>
+      <section className="work">
+        <SectionHeading section="work" />
+        {[0, 1, 2, 3, 4].map((index) => {
+          const isCarousel = index === 1 || index === 3
+
+          return (
+            <article data-motion="work-card" key={index}>
+              <div className={`work-card__image-wrap${isCarousel ? ' work-card__image-wrap--carousel' : ''}`}>
+                {isCarousel ? (
+                  <div className="depth-carousel__card"><img alt={`carousel-${index}`} /></div>
+                ) : (
+                  <img className="work-card__image" data-motion="parallax-image" alt={`static-${index}`} />
+                )}
+              </div>
+              <div className="work-card__body">
+                <div className="work-card__meta" />
+                <h3>work {index}</h3>
+                <p className="work-card__role" />
+                <p className="work-card__summary" />
+                <ul className="work-card__metrics" />
+                <div className="work-card__tags" />
+              </div>
+            </article>
+          )
+        })}
+      </section>
       <footer className="contact" data-motion="contact">
         <div className="contact__inner">
           <p className="eyebrow">contact</p>
@@ -127,7 +171,9 @@ function MotionHarness() {
           <div className="contact__foot">foot</div>
         </div>
       </footer>
-    </div>
+      </div>
+      <img data-motion="parallax-image" alt="outside-root" />
+    </>
   )
 }
 
@@ -158,15 +204,58 @@ describe('editorial section choreography', () => {
   it('uses an approved explicit ease for every section scroll tween', () => {
     render(<MotionHarness />)
 
-    const allowedEases = new Set(['power3.out', 'power4.inOut', 'expo.out'])
+    const allowedEases = new Set(['none', 'power3.out', 'power4.inOut', 'expo.out'])
     const scrollTweenSteps = motion.records.timelines
       .filter(({ scrollTrigger }) => scrollTrigger)
       .flatMap(({ steps }) => steps)
-    const standaloneScrollTweens = motion.records.froms
+    const standaloneScrollTweens = [...motion.records.froms, ...motion.records.fromTos]
       .filter(({ vars }) => vars.scrollTrigger)
       .map(({ target, vars }) => ({ target, vars }))
 
     expect([...scrollTweenSteps, ...standaloneScrollTweens]).not.toHaveLength(0)
     expect([...scrollTweenSteps, ...standaloneScrollTweens].every(({ vars }) => allowedEases.has(vars.ease))).toBe(true)
+  })
+
+  it('reveals five work cards and parallaxes only root-scoped static images on desktop', () => {
+    const { container } = render(<MotionHarness />)
+    const root = container.firstElementChild
+    const cards = Array.from(root.querySelectorAll('[data-motion="work-card"]'))
+    const workTimelines = motion.records.timelines.filter(({ scrollTrigger }) => cards.includes(scrollTrigger?.trigger))
+    const parallaxImages = Array.from(root.querySelectorAll('[data-motion="parallax-image"]'))
+
+    expect(workTimelines).toHaveLength(5)
+    expect(workTimelines.map(({ scrollTrigger }) => scrollTrigger)).toEqual(cards.map(card => ({
+      trigger: card,
+      start: 'top 72%',
+      once: true,
+      kill: expect.any(Function),
+    })))
+    expect(workTimelines.map(({ steps }) => steps[0].vars.clipPath)).toEqual([
+      'inset(0 100% 0 0)',
+      'inset(0 0 0 100%)',
+      'inset(0 100% 0 0)',
+      'inset(0 0 0 100%)',
+      'inset(0 100% 0 0)',
+    ])
+    expect(motion.records.mediaQueries).toEqual(['(min-width: 901px)'])
+    expect(motion.records.fromTos).toHaveLength(4)
+    expect(motion.records.fromTos.map(({ target }) => target)).toEqual(parallaxImages)
+    expect(motion.records.fromTos).toEqual(parallaxImages.map(image => expect.objectContaining({
+      target: image,
+      fromVars: { '--parallax-y': '-3.5%', '--parallax-scale': 1.055 },
+      vars: expect.objectContaining({
+        '--parallax-y': '3.5%',
+        '--parallax-scale': 1.055,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: image.closest('.work-card__image-wrap, .portrait-frame'),
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.8,
+        },
+      }),
+    })))
+    expect(root.querySelector('.depth-carousel__card [data-motion="parallax-image"]')).toBeNull()
+    expect(root.querySelector('.profile__topography [data-motion="parallax-image"]')).toBeNull()
   })
 })

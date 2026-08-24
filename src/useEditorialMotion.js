@@ -111,7 +111,7 @@ export default function useEditorialMotion(rootRef) {
         }
       })
 
-      gsap.utils.toArray('[data-motion="work-card"]').forEach((card, index) => {
+      Array.from(root.querySelectorAll('[data-motion="work-card"]')).forEach((card, index) => {
         const imageWrap = card.querySelector('.work-card__image-wrap')
         const copy = card.querySelectorAll('.work-card__meta, h3, .work-card__role, .work-card__summary, .work-card__metrics, .work-card__tags')
         const fromLeft = index % 2 === 0
@@ -135,11 +135,12 @@ export default function useEditorialMotion(rootRef) {
       })
 
       media.add('(min-width: 901px)', () => {
-        gsap.utils.toArray('[data-motion="parallax-image"]').forEach((image) => {
+        Array.from(root.querySelectorAll('[data-motion="parallax-image"]')).forEach((image) => {
           gsap.fromTo(image,
-            { yPercent: -3.5, scale: 1.055 },
+            { '--parallax-y': '-3.5%', '--parallax-scale': 1.055 },
             {
-              yPercent: 3.5,
+              '--parallax-y': '3.5%',
+              '--parallax-scale': 1.055,
               ease: 'none',
               scrollTrigger: {
                 trigger: image.closest('.work-card__image-wrap, .portrait-frame'),
