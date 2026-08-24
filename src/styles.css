@@ -1182,3 +1182,33 @@ a:focus-visible {
     display: none;
   }
 }
+
+.site { position: relative; }
+
+.opening-curtain {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #2b211c;
+  pointer-events: none;
+  clip-path: inset(0);
+}
+
+.opening-curtain__rule {
+  width: min(34vw, 520px);
+  height: 1px;
+  background: #c88952;
+  transform-origin: center;
+}
+
+.hero h1,
+.section-heading > div,
+.contact h2 {
+  overflow: hidden;
+}
+
+.motion-reduced .opening-curtain { display: none; }
+
+.site:not(.motion-ready) .opening-curtain { display: none; }

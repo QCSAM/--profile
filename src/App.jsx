@@ -90,15 +90,15 @@ function App() {
           <p className="hero__kicker" data-motion="hero-kicker">Earth Science · ESG · GIS</p>
           <h1 aria-label="崔琪 QI CUI">
             <span className="hero__name-primary" data-motion="hero-title">崔琪</span>
-            <small className="hero__name-secondary" data-motion="hero-name-secondary">QI CUI</small>
+            <small className="hero__name-secondary" data-motion="hero-secondary">QI CUI</small>
           </h1>
-          <div className="hero__footer" data-motion="hero-footer">
-            <p>
+          <div className="hero__footer">
+            <p data-motion="hero-copy">
               帝国理工学院地球科学与工程学院学生
               <br />
               研究地球，也研究变化如何真正发生。
             </p>
-            <div className="hero__actions">
+            <div className="hero__actions" data-motion="hero-actions">
               <a className="button button--filled" href="#work">
                 查看精选经历
               </a>
