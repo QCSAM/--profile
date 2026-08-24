@@ -7,6 +7,8 @@ const motion = vi.hoisted(() => {
     froms: [],
     fromTos: [],
     mediaQueries: [],
+    conditions: { desktop: true, narrow: false },
+    sets: [],
     timelines: [],
   }
 
@@ -64,15 +66,17 @@ const motion = vi.hoisted(() => {
       },
       matchMedia() {
         return {
-          add(query, callback) {
-            records.mediaQueries.push(query)
-            callback()
+          add(queries, callback) {
+            records.mediaQueries.push(queries)
+            callback({ conditions: records.conditions })
           },
           revert() {},
         }
       },
       registerPlugin() {},
-      set() {},
+      set(target, vars) {
+        records.sets.push({ target, vars })
+      },
       timeline,
       utils: {
         toArray(selector) {
@@ -81,10 +85,18 @@ const motion = vi.hoisted(() => {
       },
     },
     records,
+    setViewport(viewport) {
+      records.conditions = {
+        desktop: viewport === 'desktop',
+        narrow: viewport === 'narrow',
+      }
+    },
     reset() {
       records.froms.length = 0
       records.fromTos.length = 0
       records.mediaQueries.length = 0
+      records.conditions = { desktop: true, narrow: false }
+      records.sets.length = 0
       records.timelines.length = 0
     },
   }
@@ -237,7 +249,10 @@ describe('editorial section choreography', () => {
       'inset(0 0 0 100%)',
       'inset(0 100% 0 0)',
     ])
-    expect(motion.records.mediaQueries).toEqual(['(min-width: 901px)'])
+    expect(motion.records.mediaQueries).toEqual([{
+      desktop: '(min-width: 901px)',
+      narrow: '(max-width: 900px)',
+    }])
     expect(motion.records.fromTos).toHaveLength(4)
     expect(motion.records.fromTos.map(({ target }) => target)).toEqual(parallaxImages)
     expect(motion.records.fromTos).toEqual(parallaxImages.map(image => expect.objectContaining({
@@ -257,5 +272,38 @@ describe('editorial section choreography', () => {
     })))
     expect(root.querySelector('.depth-carousel__card [data-motion="parallax-image"]')).toBeNull()
     expect(root.querySelector('.profile__topography [data-motion="parallax-image"]')).toBeNull()
+  })
+
+  it('gives the hero opening transform to its wrapper while the video keeps its independent breathe animation', () => {
+    render(<MotionHarness />)
+
+    expect(motion.records.sets).toContainEqual({
+      target: '.hero__media',
+      vars: { scale: 1.08, scaleY: 0.92, filter: 'brightness(0.62)' },
+    })
+    const opening = motion.records.timelines.find(({ scrollTrigger }) => !scrollTrigger)
+    expect(opening.steps).toContainEqual(expect.objectContaining({
+      target: '.hero__media',
+      vars: expect.objectContaining({ scale: 1, scaleY: 1 }),
+    }))
+    expect(motion.records.sets.some(({ target }) => target === '.hero__video')).toBe(false)
+  })
+
+  it('uses shorter, lower-travel choreography and no parallax on narrow screens', () => {
+    motion.setViewport('narrow')
+    const { container } = render(<MotionHarness />)
+    const root = container.firstElementChild
+    const firstCard = root.querySelector('[data-motion="work-card"]')
+    const opening = motion.records.timelines.find(({ scrollTrigger }) => !scrollTrigger)
+    const titleSet = motion.records.sets.find(({ target }) => target === '[data-motion="hero-title"]')
+    const titleEntrance = opening.steps.find(({ target }) => target === '[data-motion="hero-title"]')
+    const workTimeline = motion.records.timelines.find(({ scrollTrigger }) => scrollTrigger?.trigger === firstCard)
+    const workCopyEntrance = workTimeline.steps[1]
+
+    expect(titleSet.vars.yPercent).toBe(72)
+    expect(titleEntrance.vars).toMatchObject({ duration: 0.65, yPercent: 0 })
+    expect(workTimeline.steps[0].vars).toMatchObject({ duration: 0.82, scale: 1.025 })
+    expect(workCopyEntrance.vars).toMatchObject({ duration: 0.55, stagger: 0.055, y: 32 })
+    expect(motion.records.fromTos).toHaveLength(0)
   })
 })

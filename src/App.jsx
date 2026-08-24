@@ -73,17 +73,19 @@ function App() {
       </nav>
 
       <header className="hero" id="top">
-        <video
-          className="hero__video"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/media/hero-poster.jpg"
-          aria-hidden="true"
-        >
-          <source src="/media/hero-geology.mp4" type="video/mp4" />
-        </video>
+        <div className="hero__media" aria-hidden="true">
+          <video
+            className="hero__video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="/media/hero-poster.jpg"
+          >
+            <source src="/media/hero-geology.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div className="hero__shade" />
 
         <div className="hero__content shell">
@@ -206,6 +208,8 @@ function App() {
                       data-motion="parallax-image"
                       src={project.image}
                       alt={`${project.title}主题视觉，非项目现场照片`}
+                      loading="lazy"
+                      decoding="async"
                     />
                   )}
                   <span className="work-card__number">{String(index + 1).padStart(2, '0')}</span>

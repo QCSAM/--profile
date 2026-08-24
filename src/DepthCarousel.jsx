@@ -23,6 +23,7 @@ function DepthCarousel({
     [items],
   )
   const [active, setActive] = useState(0)
+  const [autoplayPaused, setAutoplayPaused] = useState(false)
   const rootRef = useRef(null)
   const cardRefs = useRef([])
   const positionRef = useRef(0)
@@ -88,10 +89,10 @@ function DepthCarousel({
   useEffect(() => {
     if (!autoplay || slides.length < 2 || prefersReducedMotion()) return undefined
     const timer = window.setInterval(() => {
-      if (!pausedRef.current) focusSlide(active + 1)
+      if (!pausedRef.current && !autoplayPaused) focusSlide(active + 1)
     }, Math.max(autoplayDelay, 1200))
     return () => window.clearInterval(timer)
-  }, [active, autoplay, autoplayDelay, focusSlide, slides.length])
+  }, [active, autoplay, autoplayDelay, autoplayPaused, focusSlide, slides.length])
 
   useEffect(() => () => tweenRef.current?.kill(), [])
 
@@ -141,6 +142,8 @@ function DepthCarousel({
               src={slide.image}
               alt={slide.alt}
               draggable="false"
+              loading="lazy"
+              decoding="async"
               style={{ objectPosition: slide.position || 'center' }}
             />
             <span className="depth-carousel__tint" aria-hidden="true" />
@@ -150,6 +153,18 @@ function DepthCarousel({
 
       <button type="button" className="depth-carousel__arrow depth-carousel__arrow--prev" aria-label="上一张照片" onClick={() => focusSlide(active - 1)}>←</button>
       <button type="button" className="depth-carousel__arrow depth-carousel__arrow--next" aria-label="下一张照片" onClick={() => focusSlide(active + 1)}>→</button>
+
+      {autoplay && slides.length > 1 && !prefersReducedMotion() ? (
+        <button
+          type="button"
+          className="depth-carousel__playback"
+          aria-label={autoplayPaused ? '继续自动播放' : '暂停自动播放'}
+          aria-pressed={autoplayPaused}
+          onClick={() => setAutoplayPaused(paused => !paused)}
+        >
+          <span aria-hidden="true">{autoplayPaused ? '▶' : 'Ⅱ'}</span>
+        </button>
+      ) : null}
 
       <div className="depth-carousel__dots" aria-label="选择照片">
         {slides.map((slide, index) => (

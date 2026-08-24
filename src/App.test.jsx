@@ -37,6 +37,16 @@ describe('resume site', () => {
     expect(heading.querySelector('.hero__name-secondary')).toHaveTextContent('QI CUI')
   })
 
+  it('separates the opening transform wrapper from the breathing hero video and limits preload work', () => {
+    render(<App />)
+
+    const media = document.querySelector('.hero__media')
+    const video = media?.querySelector('.hero__video')
+    expect(media).toBeInTheDocument()
+    expect(video).toHaveAttribute('preload', 'metadata')
+    expect(video.querySelector('source')).toHaveAttribute('src', '/media/hero-geology.mp4')
+  })
+
   it('turns the navigation into a floating kraft-paper bar after the hero', () => {
     render(<App />)
     Object.defineProperty(window, 'scrollY', { configurable: true, value: 900 })
@@ -104,6 +114,17 @@ describe('resume site', () => {
     expect(parallaxTargets).toHaveLength(4)
     expect(document.querySelector('.depth-carousel__card [data-motion="parallax-image"]')).toBeNull()
     expect(document.querySelector('.profile__topography [data-motion="parallax-image"]')).toBeNull()
+  })
+
+  it('defers decoding and loading for every below-fold work image', () => {
+    render(<App />)
+
+    const workImages = document.querySelectorAll('#work img')
+    expect(workImages.length).toBeGreaterThan(0)
+    workImages.forEach((image) => {
+      expect(image).toHaveAttribute('loading', 'lazy')
+      expect(image).toHaveAttribute('decoding', 'async')
+    })
   })
 
   it('exposes a deterministic keyboard focus target for the skip link', () => {

@@ -92,6 +92,33 @@
 .depth-carousel__arrow--prev { left: 18px; }
 .depth-carousel__arrow--next { right: 18px; }
 
+.depth-carousel__playback {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2200;
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(242, 229, 208, 0.68);
+  color: #f2e5d0;
+  background: rgba(43, 30, 21, 0.72);
+  place-items: center;
+  cursor: pointer;
+}
+
+.depth-carousel__playback:hover,
+.depth-carousel__playback:focus-visible {
+  color: #2b211c;
+  background: #d39a62;
+}
+
+.depth-carousel__playback span {
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
 .depth-carousel__dots {
   position: absolute;
   z-index: 2200;
@@ -129,5 +156,6 @@
 @media (prefers-reduced-motion: reduce) {
   .depth-carousel__card { will-change: auto; }
   .depth-carousel__arrow,
-  .depth-carousel__dot { transition: none; }
+  .depth-carousel__dot,
+  .depth-carousel__playback { transition: none; }
 }

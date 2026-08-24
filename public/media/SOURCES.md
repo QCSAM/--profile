@@ -9,6 +9,8 @@ These images are thematic visuals for the first website version. They are not pr
 - `work-carbon.jpg` — “Solar panels cover a large industrial building's roof,” Ben Issac on Unsplash, photo `NEIfsHMjHSQ`, Unsplash License.
 - `work-supply-chain.jpg` — “A warehouse filled with lots of boxes and pallets,” Ashley on Unsplash, photo `28b8xlTT5t4`, Unsplash License.
 - `work-sanjiangyuan.jpg` — “Aerial View of a River Beside the Grassland,” Tom Fisk on Pexels, photo 6833204, Pexels License.
+- `wangju-industrial-park.jpg`, `wangju-industry-visit.jpg`, and `wangju-market-analysis.jpg` — user-supplied portfolio photographs.
+- `xiahe-field-site.jpg` and `xiahe-spatial-data.jpg` — user-supplied portfolio photographs.
 
 Source pages:
 

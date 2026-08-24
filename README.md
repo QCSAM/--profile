@@ -5,8 +5,8 @@
 ## 本地运行
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 浏览终端显示的本地地址即可查看网站。
@@ -14,8 +14,8 @@ npm run dev
 ## 验证
 
 ```bash
-npm test -- --run
-npm run build
+pnpm test --run
+pnpm build
 ```
 
 ## 常用修改位置

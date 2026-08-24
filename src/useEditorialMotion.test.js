@@ -122,6 +122,52 @@ describe('editorial motion safety', () => {
     expect(document.body.style.overflow).toBe('')
   })
 
+  it('rolls back classes and scroll locking when GSAP media initialization throws', () => {
+    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue(matchMediaResult(false)))
+    const getAll = vi.spyOn(ScrollTrigger, 'getAll')
+    vi.spyOn(gsap, 'matchMedia').mockImplementationOnce(() => {
+      throw new Error('matchMedia initialization failed')
+    })
+
+    const { container } = render(createElement(Harness))
+
+    expect(container.firstChild).not.toHaveClass('motion-ready', 'motion-opening', 'motion-reduced')
+    expect(document.documentElement.style.overflow).toBe('')
+    expect(document.body.style.overflow).toBe('')
+    expect(getAll).not.toHaveBeenCalled()
+  })
+
+  it('kills only partially created controller items when GSAP setup throws', () => {
+    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue(matchMediaResult(false)))
+    const kill = vi.fn()
+    const revertMedia = vi.fn()
+    const timeline = {
+      from: vi.fn(function chain() { return this }),
+      fromTo: vi.fn(function chain() { return this }),
+      kill,
+      set: vi.fn(function chain() { return this }),
+      to: vi.fn(function chain() { return this }),
+    }
+    const getAll = vi.spyOn(ScrollTrigger, 'getAll')
+    vi.spyOn(gsap, 'timeline').mockReturnValue(timeline)
+    vi.spyOn(gsap, 'matchMedia').mockReturnValue({
+      add(_queries, callback) { callback({ conditions: { desktop: true, narrow: false } }) },
+      revert: revertMedia,
+    })
+    vi.spyOn(gsap, 'set').mockImplementationOnce(() => {
+      throw new Error('hero setup failed')
+    })
+
+    const { container } = render(createElement(Harness))
+
+    expect(kill).toHaveBeenCalledTimes(1)
+    expect(revertMedia).toHaveBeenCalledTimes(1)
+    expect(getAll).not.toHaveBeenCalled()
+    expect(container.firstChild).not.toHaveClass('motion-ready', 'motion-opening')
+    expect(document.documentElement.style.overflow).toBe('')
+    expect(document.body.style.overflow).toBe('')
+  })
+
   it('refreshes scroll geometry when an incomplete root image loads', () => {
     vi.stubGlobal('matchMedia', vi.fn().mockReturnValue(matchMediaResult(false)))
     const refresh = vi.spyOn(ScrollTrigger, 'refresh')
