@@ -96,4 +96,13 @@ describe('resume site', () => {
     expect(document.querySelector('[data-motion="contact-details"]')).toBeInTheDocument()
     expect(document.querySelector('[data-motion="contact-actions"]')).toBeInTheDocument()
   })
+
+  it('marks only static images and the portrait for parallax', () => {
+    render(<App />)
+
+    const parallaxTargets = document.querySelectorAll('[data-motion="parallax-image"]')
+    expect(parallaxTargets).toHaveLength(4)
+    expect(document.querySelector('.depth-carousel__card [data-motion="parallax-image"]')).toBeNull()
+    expect(document.querySelector('.profile__topography [data-motion="parallax-image"]')).toBeNull()
+  })
 })

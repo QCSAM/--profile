@@ -52,6 +52,12 @@ const motion = vi.hoisted(() => {
         records.froms.push({ target, vars })
         return animation
       },
+      matchMedia() {
+        return {
+          add() {},
+          revert() {},
+        }
+      },
       registerPlugin() {},
       set() {},
       timeline,

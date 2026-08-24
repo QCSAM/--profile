@@ -145,7 +145,7 @@ function App() {
 
             <div className="profile__layout">
               <figure className="portrait-frame" data-motion="portrait">
-                <img src="/media/portrait.jpg" alt="崔琪个人头像" />
+                <img src="/media/portrait.jpg" alt="崔琪个人头像" data-motion="parallax-image" />
                 <figcaption>QI CUI · LONDON / BEIJING</figcaption>
               </figure>
 
@@ -203,6 +203,7 @@ function App() {
                   ) : (
                     <img
                       className="work-card__image"
+                      data-motion="parallax-image"
                       src={project.image}
                       alt={`${project.title}主题视觉，非项目现场照片`}
                     />

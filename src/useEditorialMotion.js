@@ -35,6 +35,7 @@ export default function useEditorialMotion(rootRef) {
       timelines: [],
       triggers: [],
     }
+    const media = gsap.matchMedia()
 
     const context = gsap.context(() => {
       const trackAnimation = (animation) => {
@@ -110,6 +111,46 @@ export default function useEditorialMotion(rootRef) {
         }
       })
 
+      gsap.utils.toArray('[data-motion="work-card"]').forEach((card, index) => {
+        const imageWrap = card.querySelector('.work-card__image-wrap')
+        const copy = card.querySelectorAll('.work-card__meta, h3, .work-card__role, .work-card__summary, .work-card__metrics, .work-card__tags')
+        const fromLeft = index % 2 === 0
+
+        trackAnimation(gsap.timeline({
+          scrollTrigger: { trigger: card, start: 'top 72%', once: true },
+        })
+          .from(imageWrap, {
+            clipPath: fromLeft ? 'inset(0 100% 0 0)' : 'inset(0 0 0 100%)',
+            scale: 1.045,
+            duration: 1.15,
+            ease: 'power4.inOut',
+          })
+          .from(copy, {
+            y: 48,
+            opacity: 0,
+            duration: 0.72,
+            stagger: 0.085,
+            ease: 'power3.out',
+          }, 0.38))
+      })
+
+      media.add('(min-width: 901px)', () => {
+        gsap.utils.toArray('[data-motion="parallax-image"]').forEach((image) => {
+          gsap.fromTo(image,
+            { yPercent: -3.5, scale: 1.055 },
+            {
+              yPercent: 3.5,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: image.closest('.work-card__image-wrap, .portrait-frame'),
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.8,
+              },
+            })
+        })
+      })
+
       trackAnimation(gsap.timeline({
         scrollTrigger: { trigger: '[data-motion="contact"]', start: 'top 75%', once: true },
       })
@@ -127,6 +168,7 @@ export default function useEditorialMotion(rootRef) {
     return () => {
       controllerAnimations.timelines.forEach(timeline => timeline.kill())
       controllerAnimations.triggers.forEach(trigger => trigger.kill())
+      media.revert()
       context.revert()
       restoreMotionState(root)
       root.classList.remove('motion-ready')
