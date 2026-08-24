@@ -1,6 +1,8 @@
-import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { cleanup, render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, it } from 'vitest'
 import App from './App'
+
+afterEach(cleanup)
 
 describe('resume site', () => {
   it('renders identity, five work cards, strengths, and public contacts', () => {
@@ -18,5 +20,13 @@ describe('resume site', () => {
       'href',
       'tel:18519131780',
     )
+  })
+
+  it('uses the Chinese name as the hero title and English name as the smaller label', () => {
+    render(<App />)
+
+    const heading = screen.getByRole('heading', { level: 1, name: /崔琪 QI CUI/i })
+    expect(heading.querySelector('.hero__name-primary')).toHaveTextContent('崔琪')
+    expect(heading.querySelector('.hero__name-secondary')).toHaveTextContent('QI CUI')
   })
 })

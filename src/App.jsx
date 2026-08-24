@@ -58,9 +58,9 @@ function App() {
 
         <div className="hero__content shell">
           <p className="hero__kicker">Earth Science · ESG · GIS</p>
-          <h1 aria-label="QI CUI 崔琪">
-            <span>QI CUI</span>
-            <small>崔琪</small>
+          <h1 aria-label="崔琪 QI CUI">
+            <span className="hero__name-primary">崔琪</span>
+            <small className="hero__name-secondary">QI CUI</small>
           </h1>
           <div className="hero__footer">
             <p>

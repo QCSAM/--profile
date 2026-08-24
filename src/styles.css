@@ -297,6 +297,15 @@ a:focus-visible {
   letter-spacing: 0.1em;
 }
 
+.hero__name-primary {
+  font-family: "Songti SC", "STSong", Georgia, serif;
+  letter-spacing: 0.01em;
+}
+
+.hero__name-secondary {
+  white-space: nowrap;
+}
+
 .hero__footer {
   display: grid;
   grid-template-columns: 1fr 1fr;
