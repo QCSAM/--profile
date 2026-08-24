@@ -416,6 +416,38 @@ a:focus-visible {
   padding-bottom: clamp(110px, 12vw, 210px);
 }
 
+.silk-section {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--paper);
+}
+
+.silk-background {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.silk-loading {
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+}
+
+.silk-background::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: rgba(246, 240, 231, 0.5);
+  pointer-events: none;
+}
+
+.silk-section__content {
+  position: relative;
+  z-index: 1;
+}
+
 .section-heading {
   display: grid;
   grid-template-columns: minmax(120px, 0.35fr) 1.65fr;

@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { profile, projects, strengths } from './resumeData'
+
+const Silk = lazy(() => import('./Silk'))
 
 const navItems = [
   ['about', 'About'],
@@ -17,6 +19,16 @@ function SectionHeading({ index, eyebrow, children }) {
         <h2>{children}</h2>
       </div>
     </header>
+  )
+}
+
+function SilkBackground() {
+  return (
+    <div className="silk-background" aria-hidden="true">
+      <Suspense fallback={<div className="silk-loading" />}>
+        <Silk speed={5} scale={0.6} color="#eee6d8" noiseIntensity={2.8} rotation={0.16} />
+      </Suspense>
+    </div>
   )
 }
 
@@ -103,12 +115,14 @@ function App() {
       </header>
 
       <main>
-        <section className="profile section shell" id="about">
-          <SectionHeading index="01" eyebrow="Profile / 个人档案">
-            在地球科学与商业问题之间，建立清晰的坐标。
-          </SectionHeading>
+        <section className="profile section silk-section" id="about">
+          <SilkBackground />
+          <div className="shell silk-section__content">
+            <SectionHeading index="01" eyebrow="Profile / 个人档案">
+              在地球科学与商业问题之间，建立清晰的坐标。
+            </SectionHeading>
 
-          <div className="profile__layout">
+            <div className="profile__layout">
             <figure className="portrait-frame">
               <img src="/media/portrait.jpg" alt="崔琪个人头像" />
               <figcaption>QI CUI · LONDON / BEIJING</figcaption>
@@ -147,6 +161,7 @@ function App() {
                   </div>
                 ))}
               </div>
+            </div>
             </div>
           </div>
         </section>
@@ -194,23 +209,26 @@ function App() {
           </div>
         </section>
 
-        <section className="strengths section shell" id="strengths">
-          <SectionHeading index="03" eyebrow="Strengths / 个人优势">
-            不止掌握工具，更知道如何把信息组织成行动。
-          </SectionHeading>
-          <div className="strength-grid">
-            {strengths.map((strength) => (
-              <article className="strength-card" key={strength.number}>
-                <span>{strength.number}</span>
-                <h3>{strength.title}</h3>
-                <p>{strength.description}</p>
-              </article>
-            ))}
+        <section className="strengths section silk-section" id="strengths">
+          <SilkBackground />
+          <div className="shell silk-section__content">
+            <SectionHeading index="03" eyebrow="Strengths / 个人优势">
+              不止掌握工具，更知道如何把信息组织成行动。
+            </SectionHeading>
+            <div className="strength-grid">
+              {strengths.map((strength) => (
+                <article className="strength-card" key={strength.number}>
+                  <span>{strength.number}</span>
+                  <h3>{strength.title}</h3>
+                  <p>{strength.description}</p>
+                </article>
+              ))}
+            </div>
+            <p className="tools-line">
+              <span>Tools</span>
+              Codex · Python · SQL · ArcGIS · Inkscape · Puffinplots · Excel · PowerPoint
+            </p>
           </div>
-          <p className="tools-line">
-            <span>Tools</span>
-            Codex · Python · SQL · ArcGIS · Inkscape · Puffinplots · Excel · PowerPoint
-          </p>
         </section>
       </main>
 
