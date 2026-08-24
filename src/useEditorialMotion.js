@@ -37,11 +37,16 @@ export default function useEditorialMotion(rootRef) {
     }
 
     const context = gsap.context(() => {
-      const opening = gsap.timeline({
+      const trackAnimation = (animation) => {
+        controllerAnimations.timelines.push(animation)
+        if (animation.scrollTrigger) controllerAnimations.triggers.push(animation.scrollTrigger)
+        return animation
+      }
+
+      const opening = trackAnimation(gsap.timeline({
         defaults: { ease: 'power3.out' },
         onComplete: () => restoreMotionState(root),
-      })
-      controllerAnimations.timelines.push(opening)
+      }))
 
       gsap.set('[data-motion="hero-title"]', { yPercent: 115, scaleX: 0.82, transformOrigin: 'left center' })
       gsap.set('[data-motion="hero-kicker"], [data-motion="hero-secondary"], [data-motion="hero-copy"]', {
@@ -70,6 +75,49 @@ export default function useEditorialMotion(rootRef) {
         }, 1.75)
         .to({}, { duration: 0.3 }, 2.5)
         .set('.opening-curtain', { display: 'none' }, 2.8)
+
+      gsap.utils.toArray('[data-motion="section-heading"]').forEach((heading) => {
+        const index = heading.querySelector('.section-heading__index')
+        const eyebrow = heading.querySelector('.eyebrow')
+        const title = heading.querySelector('h2')
+
+        trackAnimation(gsap.timeline({
+          scrollTrigger: { trigger: heading, start: 'top 72%', once: true },
+        })
+          .from(index, { x: -34, opacity: 0, duration: 0.55, ease: 'power3.out' })
+          .from(heading, { '--heading-rule-scale': 0, duration: 0.75, ease: 'power4.inOut' }, 0.05)
+          .from(eyebrow, { y: 24, opacity: 0, duration: 0.55 }, 0.2)
+          .from(title, { y: 105, scaleX: 0.9, transformOrigin: 'left center', duration: 1.1, ease: 'expo.out' }, 0.25))
+      })
+
+      trackAnimation(gsap.timeline({
+        scrollTrigger: { trigger: '.profile__layout', start: 'top 72%', once: true },
+      })
+        .from('[data-motion="portrait"]', { clipPath: 'inset(100% 0 0)', y: 48, duration: 1.05, ease: 'power4.inOut' })
+        .from('[data-motion="profile-copy"] > *', { y: 42, opacity: 0, duration: 0.75, stagger: 0.1 }, 0.35)
+        .from('[data-motion="profile-fact"]', { y: 34, scaleX: 0.94, opacity: 0, duration: 0.65, stagger: 0.1 }, 0.7))
+
+      trackAnimation(gsap.from('[data-motion="strength-card"]', {
+        scrollTrigger: { trigger: '.strength-grid', start: 'top 72%', once: true },
+        y: 62,
+        scaleX: 0.94,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.12,
+        ease: 'power3.out',
+      }))
+
+      trackAnimation(gsap.timeline({
+        scrollTrigger: { trigger: '[data-motion="contact"]', start: 'top 75%', once: true },
+      })
+        .from('.contact__inner > .eyebrow', { y: 28, opacity: 0, duration: 0.55 })
+        .from('.contact h2', { y: 120, scaleX: 0.88, transformOrigin: 'left center', duration: 1.1, ease: 'expo.out' }, 0.15)
+        .from('.contact__intro, [data-motion="contact-details"], [data-motion="contact-actions"], .contact__foot', {
+          y: 38,
+          opacity: 0,
+          duration: 0.72,
+          stagger: 0.11,
+        }, 0.58))
     }, root)
 
     return () => {

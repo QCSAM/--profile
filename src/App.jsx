@@ -144,7 +144,7 @@ function App() {
             </SectionHeading>
 
             <div className="profile__layout">
-              <figure className="portrait-frame" data-motion="portrait-frame">
+              <figure className="portrait-frame" data-motion="portrait">
                 <img src="/media/portrait.jpg" alt="崔琪个人头像" />
                 <figcaption>QI CUI · LONDON / BEIJING</figcaption>
               </figure>

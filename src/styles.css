@@ -417,11 +417,28 @@ a:focus-visible {
 }
 
 .section-heading {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(120px, 0.35fr) 1.65fr;
   gap: 40px;
   padding-top: 18px;
   border-top: 1px solid var(--rule);
+}
+
+.motion-ready .section-heading {
+  border-top-color: transparent;
+}
+
+.motion-ready .section-heading::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  content: "";
+  background: var(--rule);
+  transform: scaleX(var(--heading-rule-scale, 1));
+  transform-origin: left;
 }
 
 .section-heading__index {
@@ -627,6 +644,14 @@ a:focus-visible {
 
 .work .section-heading {
   border-color: rgba(255, 255, 255, 0.22);
+}
+
+.motion-ready .work .section-heading::before {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.motion-ready .work .section-heading {
+  border-top-color: transparent;
 }
 
 .work .section-heading__index {

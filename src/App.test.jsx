@@ -1,8 +1,15 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from './App'
 
-afterEach(cleanup)
+beforeEach(() => {
+  vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({ matches: true }))
+})
+
+afterEach(() => {
+  cleanup()
+  vi.unstubAllGlobals()
+})
 
 describe('resume site', () => {
   it('renders identity, five work cards, strengths, and public contacts', () => {
@@ -77,5 +84,16 @@ describe('resume site', () => {
     expect(document.querySelectorAll('[data-motion="section-heading"]')).toHaveLength(3)
     expect(document.querySelectorAll('[data-motion="work-card"]')).toHaveLength(5)
     expect(document.querySelector('[data-motion="contact"]')).toBeInTheDocument()
+  })
+
+  it('marks profile, strength, and contact content for hierarchical scroll entrances', () => {
+    render(<App />)
+
+    expect(document.querySelector('[data-motion="portrait"]')).toBeInTheDocument()
+    expect(document.querySelector('[data-motion="profile-copy"]')).toBeInTheDocument()
+    expect(document.querySelectorAll('[data-motion="profile-fact"]')).toHaveLength(3)
+    expect(document.querySelectorAll('[data-motion="strength-card"]')).toHaveLength(4)
+    expect(document.querySelector('[data-motion="contact-details"]')).toBeInTheDocument()
+    expect(document.querySelector('[data-motion="contact-actions"]')).toBeInTheDocument()
   })
 })
