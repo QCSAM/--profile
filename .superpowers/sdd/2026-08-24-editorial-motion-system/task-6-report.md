@@ -87,3 +87,40 @@ The test run printed four non-fatal jsdom `Window.scrollTo()` “Not implemented
 - Prior evidence-test commit: `95b7bc0 test: prove motion safety fallbacks`.
 - This report correction is committed as the latest `docs: correct motion QA evidence` entry in Git history.
 - The three screenshot artifacts remain intentionally ignored; this report will be force-added for an auditable correction commit.
+
+## Round 2 — mobile hero glyph clipping fix
+
+Reported issue: at the actual 796px viewport, the large Chinese hero name `崔琪` was visibly clipped above and below after the opening settled.
+
+### Root-cause investigation
+
+- The mobile `@media (max-width: 760px)` rule set `.hero h1` to `line-height: 0.84`.
+- The global motion mask keeps `.hero h1 { overflow: hidden; }` so the upward title reveal remains masked.
+- The final opening tween returns `[data-motion="hero-title"]` to `yPercent: 0` and `scaleX: 1`; it does not retain a title clip-path. The curtain is independently removed. This excludes an unfinished transform, clip-path, or curtain as the source of settled-state clipping.
+- The short 0.84 line box therefore clipped the Songti/STSong Chinese glyph ink inside the required `overflow: hidden` mask at the narrow breakpoint. Wide view uses the separate base line-height path.
+
+### Fix and regression proof
+
+- Changed only the mobile `.hero h1` line-height from `0.84` to `1`. The Chinese name remains large, the English `QI CUI` remains a smaller block below it, and the existing `h1` overflow mask plus GSAP reveal target are unchanged.
+- Added a parsed-CSS regression test in `motionFallback.test.jsx`: with the `h1` mask still `overflow: hidden`, the 760px media rule must provide `line-height: 1`. It failed before the CSS correction (`received 0.84`) and passes after it.
+- Focused verification after the change: 3 test files / 16 tests passed.
+
+### Visual verification status
+
+I started the task-worktree Vite server on port 5174 and attempted to reconnect the documented in-app Browser. IAB returned unavailable, so this round could not capture fresh 796px or 1700px bounding boxes/screenshots. No alternative browser surface was substituted. The retained screenshots above predate this CSS correction and are not presented as visual evidence of the corrected title.
+
+Round-2 final verification:
+
+```text
+pnpm test --run
+  Test Files  7 passed (7)
+  Tests  28 passed (28)
+
+pnpm build
+  ✓ built in 456ms
+
+git diff --check
+  exit 0; no whitespace errors
+```
+
+Round-2 commit records this scoped CSS fix, its regression test, and this evidence update.

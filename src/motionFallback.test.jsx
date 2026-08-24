@@ -59,4 +59,19 @@ describe('motion-controller fallback', () => {
     expect(focusVisibleRule.style.outline).toBe('2px solid currentColor')
     expect(focusVisibleRule.style.outlineOffset).toBe('5px')
   })
+
+  it('gives the masked mobile hero title a full line box for the Chinese glyphs', () => {
+    const mobileMediaRule = Array.from(stylesheet.sheet.cssRules).find(
+      (rule) => rule.conditionText === '(max-width: 760px)',
+    )
+    const mobileHeroTitleRule = Array.from(mobileMediaRule.cssRules).find(
+      (rule) => rule.selectorText === '.hero h1',
+    )
+    const heroMaskRule = Array.from(stylesheet.sheet.cssRules).find(
+      (rule) => rule.selectorText === '.hero h1,\n.section-heading > div,\n.contact h2',
+    )
+
+    expect(heroMaskRule.style.overflow).toBe('hidden')
+    expect(mobileHeroTitleRule.style.lineHeight).toBe('1')
+  })
 })
