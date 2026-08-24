@@ -561,12 +561,25 @@ a:focus-visible {
 .profile__details dd span,
 .profile__details dd a {
   display: block;
-  color: var(--muted);
   font-size: 0.86rem;
 }
 
-.profile__details dd a:hover {
+.profile__details dd span {
+  color: var(--muted);
+}
+
+.profile__details dd a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.24em;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
+}
+
+.profile__details dd a:hover,
+.profile__details dd a:focus-visible {
   color: var(--ochre);
+  text-decoration-color: currentColor;
 }
 
 .profile__facts {
